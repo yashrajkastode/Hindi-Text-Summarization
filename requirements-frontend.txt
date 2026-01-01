@@ -1,0 +1,17 @@
+# Frontend Dependencies (Node.js / npm)
+
+node>=18
+npm>=9
+
+# Core
+react
+react-dom
+vite
+
+# Styling
+tailwindcss@^4
+@tailwindcss/vite
+
+# UI / Utils
+lucide-react
+axios
