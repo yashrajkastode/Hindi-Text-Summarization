@@ -66,15 +66,14 @@ class IndicBartInference:
 
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
-        generated_ids = self.model.generate(
+       generated_ids = self.model.generate(
             **inputs,
             max_length=MAX_OUTPUT_TOKENS,
-            min_length=80,              # 🔴 force compression
-            num_beams=6,
-            length_penalty=1.8,         # 🔴 discourage copying
-            repetition_penalty=1.2,     # 🔴 discourage verbatim output
+            num_beams=NUM_BEAMS,
+            length_penalty=LENGTH_PENALTY,
+            early_stopping=EARLY_STOPPING,
+            repetition_penalty=1.2,
             no_repeat_ngram_size=4,
-            early_stopping=True,
         )
 
         decoded = self.tokenizer.decode(
