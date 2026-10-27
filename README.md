@@ -1,143 +1,192 @@
-# Hindi Text Summarization System 🇮🇳
+# 🇮🇳 Hindi Text Summarization System
 
-A backend-focused Hindi text summarization system built with Python, Django REST Framework, and transformer-based NLP. The project aims to provide a REST API for generating concise summaries of Hindi news articles and long-form text.
+A full-stack Hindi text summarization application that explores abstractive text generation using transformer-based NLP models, a Django REST API, and a modern web frontend.
 
-The architecture separates API handling, model inference, and asynchronous task processing to support maintainability and future extension.
+The project combines machine learning inference with backend API development and frontend integration, providing a foundation for experimenting with Hindi summarization and multilingual NLP.
 
 ## ✨ Features
 
-- Abstractive text summarization for Hindi text
-- Transformer-based multilingual model: `google/mt5-base`
-- REST API using Django REST Framework
-- Separate summarization service for model inference
-- Celery integration for asynchronous processing
-- Docker-based deployment configuration
-- Gunicorn support for serving the Django application
-- Extensible design for experimenting with other Indic-language models
+- **Hindi text summarization** — designed for summarizing Hindi news articles and long-form text.
+- **Transformer-based NLP** — integrates a multilingual text-to-text model for summary generation.
+- **REST API** — Django REST Framework-based backend architecture.
+- **Modular backend** — separates application configuration, summarization logic, and ML-related components.
+- **Web frontend** — Vite-based frontend with a dedicated source directory and public assets.
+- **Deployment configuration** — includes Docker-related files and Gunicorn configuration.
+- **Extensible architecture** — structured to support future experimentation with other Hindi and Indic-language models.
 
-> **Project status:** Verify the current implementation of each feature before treating it as production-ready. In particular, asynchronous processing, containerized deployment, and model quality should be tested in the target environment.
+*Feature availability depends on the current implementation and configuration. See the backend and frontend documentation for component-specific instructions.*
 
-## 🧠 Model and Approach
+## 🧠 NLP Model
 
-| Component | Details |
+The project documentation identifies `google/mt5-base` as the intended summarization model.
+
+| Component | Description |
 |---|---|
-| Model | `google/mt5-base` |
-| Architecture | Multilingual encoder–decoder Transformer |
+| Model family | mT5 multilingual text-to-text Transformer |
+| Target language | Hindi |
 | Task | Abstractive text summarization |
-| Fine-tuning | No fine-tuning claimed in the current implementation |
-| Inference | Model-based text generation |
+| Integration | Python-based ML inference within the backend |
 
-**Important:** mT5 is a general-purpose multilingual text-to-text model. Its summarization performance depends on the input, prompting or task formulation, decoding configuration, and whether the model has been trained for the target task. Hindi summarization quality should be evaluated on representative examples.
+mT5 is a general-purpose multilingual model. Its ability to produce coherent and factually consistent Hindi summaries depends on the task formulation, model configuration, and any task-specific training or adaptation.
 
-## 🏗️ System Architecture
+**Evaluation:** Summarization quality should be assessed using representative Hindi text and suitable evaluation methods before making claims about model accuracy or performance.
 
-```text
-Client
-  |
-  v
-Django REST Framework API
-  |
-  v
-Summarization Service
-  |
-  v
-mT5 Model Inference
-  |
-  v
-Generated Summary
-```
-
-Optional asynchronous processing flow, when configured:
+## 🏗️ Architecture
 
 ```text
-Client
-  |
-  v
-Django REST API
-  |
-  v
-Celery Task Queue <----> Redis
-  |
-  v
-Summarization Worker
-  |
-  v
-Model Inference
+                    User
+                     |
+                     v
+              Web Frontend
+             (Vite / JavaScript)
+                     |
+                     v
+              Django REST API
+                     |
+                     v
+            Summarization Service
+                     |
+                     v
+              ML Inference
+                     |
+                     v
+             Generated Summary
+                     |
+                     v
+             API Response
+                     |
+                     v
+                Web UI
 ```
 
-Gunicorn can serve the Django application in a production-style deployment. The API, task queue, and model worker should be configured and tested according to the deployment environment.
+The repository separates the frontend and backend, while the backend contains dedicated directories for ML components, summarization logic, configuration, scripts, and deployment-related files.
 
 ## 📁 Repository Structure
 
 ```text
 Hindi-Text-Summarization/
-├── backend/       # Django backend and ML services
-├── frontend/      # Optional frontend, if implemented
-├── docker/        # Container configuration
-├── scripts/       # Model download or warmup scripts
-└── README.md
+│
+├── backend/
+│   ├── config/                 # Backend configuration
+│   ├── docker/                 # Docker-related files
+│   ├── ml/                     # Machine learning components
+│   ├── scripts/                # Utility and setup scripts
+│   ├── summarizer/             # Summarization application
+│   ├── gunicorn.conf.py        # Gunicorn configuration
+│   ├── manage.py               # Django management entry point
+│   └── README.md               # Backend-specific documentation
+│
+├── frontend/
+│   ├── public/                 # Static assets
+│   ├── src/                    # Frontend source code
+│   ├── package.json            # Frontend dependencies and scripts
+│   ├── vite.config.js           # Vite configuration
+│   └── README.md               # Frontend-specific documentation
+│
+├── requirements-backend.txt    # Python dependencies
+├── requirements-frontend.txt   # Frontend-related requirements, if applicable
+└── README.md                   # Project overview
 ```
-
-The directory descriptions above are intended to reflect the project layout. Update them if the actual repository structure differs.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Python version supported by the project dependencies
-- pip and a virtual environment
+- Python and pip
+- Node.js and npm
 - Git
-- Additional services such as Redis and Docker, if required by the selected configuration
+- Additional services required by the backend configuration, if any
 
-### Setup
-
-Clone the repository:
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/yashrajkastode/Hindi-Text-Summarization.git
 cd Hindi-Text-Summarization
 ```
 
-Continue with the backend-specific installation and configuration instructions:
+### 2. Set up the backend
 
-**[Backend README](backend/README.md)**
+```bash
+python -m venv .venv
+```
 
-Follow the documented instructions to configure environment variables, install dependencies, load the model, start the API, and run any required background services.
+Activate the virtual environment.
 
-## 🧪 Potential Use Cases
+**Windows:**
 
-- Summarizing Hindi news articles
-- Condensing long-form Hindi text
-- Experimenting with multilingual transformer models
-- Demonstrating the integration of NLP inference with a Django REST API
-- Exploring asynchronous processing for ML workloads
+```powershell
+.venv\Scripts\Activate.ps1
+```
 
-## 🔬 Evaluation and Future Improvements
+**Linux / macOS:**
 
-Potential improvements include:
+```bash
+source .venv/bin/activate
+```
 
-- Evaluate summary quality on a representative Hindi dataset
-- Compare generated summaries against reference summaries using suitable metrics, such as ROUGE
-- Inspect factual consistency, important information retention, and grammatical quality
-- Benchmark inference latency and memory consumption
-- Add API validation, error handling, and automated tests
-- Measure the performance difference between synchronous and asynchronous inference
-- Compare mT5 with Hindi-capable Indic-language models
+Install the backend dependencies:
 
-Only publish evaluation scores and performance claims after running the corresponding experiments.
+```bash
+pip install -r requirements-backend.txt
+```
+
+Follow the instructions in [`backend/README.md`](backend/README.md) for environment configuration, model setup, and running the Django application.
+
+### 3. Set up the frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Use the local URL printed by Vite to open the frontend.
+
+Check the frontend configuration and backend API settings to ensure the frontend sends requests to the correct backend address.
+
+### 4. Deployment
+
+The repository contains backend Docker-related files and a Gunicorn configuration.
+
+Refer to the backend documentation for the supported deployment workflow. Production deployment requires appropriate environment variables, dependency configuration, API security, and testing of the complete application.
 
 ## 🛠️ Technology Stack
 
-- **Language:** Python
-- **Backend:** Django, Django REST Framework
-- **NLP:** Hugging Face Transformers, mT5
-- **Task Processing:** Celery, Redis (if configured)
-- **Deployment:** Docker, Gunicorn (if configured)
+| Area | Technologies |
+|---|---|
+| Programming | Python, JavaScript |
+| Machine Learning | Hugging Face Transformers, mT5 |
+| Backend | Django, Django REST Framework |
+| Frontend | Vite, JavaScript |
+| Deployment | Docker-related configuration, Gunicorn |
 
-## 📌 Project Focus
+Additional technologies should be listed here when their implementation is confirmed in the repository.
 
-This project explores the engineering involved in integrating transformer-based NLP inference with a Python web backend. Its design emphasizes separation of concerns, API integration, and extensibility for further experiments in Hindi and Indic-language summarization.
+## 🎯 Use Cases
+
+- Summarizing Hindi news articles and long-form text
+- Exploring multilingual transformer models for Indic-language NLP
+- Integrating ML inference into a REST API
+- Building a full-stack application around an NLP model
+- Experimenting with modular ML service architecture
+
+## 🔬 Potential Improvements
+
+- Evaluate summary quality on a representative Hindi dataset.
+- Compare model outputs using ROUGE and qualitative factual-consistency checks.
+- Benchmark inference latency and memory usage.
+- Add automated tests for API endpoints and summarization logic.
+- Improve error handling and input validation.
+- Document API request and response examples.
+- Validate the end-to-end frontend, backend, and deployment workflow.
+- Compare mT5 with other suitable Hindi and Indic-language summarization models.
+
+## 👨‍💻 Author
+
+**Yashraj Kastode**
+
+[GitHub Profile](https://github.com/yashrajkastode)
 
 ---
 
-**Author:** [Yashraj Kastode](https://github.com/yashrajkastode)
+*An NLP and full-stack engineering project focused on Hindi text summarization and the integration of machine learning with web applications.*
